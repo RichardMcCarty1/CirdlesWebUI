@@ -1,3 +1,5 @@
+import { MULTI_VALUE_TITLES as MVT } from "./constants";
+
 //used in FieldCard
 export const isMetaDataAddCard = cardID => {
   let totalAddedCards = 4;
@@ -14,25 +16,6 @@ export const lengthCheckedValue = fieldVal => {
     value = value + "...";
   }
   return value;
-};
-
-//used in FieldCard
-export const getOne2One = optionArray => {
-  let arr = [];
-  for (let i = 0; i < optionArray.length; i++) {
-    if (optionArray[i].format === "one2one") arr.push(optionArray[i].title);
-  }
-  return arr;
-};
-
-export const typeField = (keyNum, totalMetaDataAdd) => {
-  let type;
-
-  if (keyNum > totalMetaDataAdd) type = "both";
-  else {
-    type = "added_card";
-  }
-  return type;
 };
 
 export const isSesarTitlePresent = (title, ent) => {
@@ -67,12 +50,60 @@ export const lastMetaDataAdd = entries => {
   }
 };
 
-//gets defalut value for select and options in Dropdown from store
+export const findFirstValueBySesarTitle = (entryStore, sesarTitle) => {
+  let value = "defaultName";
+  for (let i = 0; i < entryStore.length; i++) {
+    if (entryStore[i].sesarTitle === sesarTitle) {
+      value = entryStore[i].value;
+      break;
+    }
+  }
+  return value;
+};
+
+//gets default value for select and options in Dropdown from store
 export const dropdownSet = (hasStoreLoaded, entryStore, idInStore) => {
-  let defaultVal = "Sesar Selection";
+  let defaultVal = "Sesar_Selection";
 
   if (hasStoreLoaded && entryStore[idInStore].sesarTitle !== "") {
     defaultVal = entryStore[idInStore].sesarTitle;
   }
   return defaultVal;
+};
+
+//Used in PreviewModal
+//filters entries for currently set mappings
+export const dialogFilter = entries => {
+  //filters to find all one to one mappings
+  const singleVal = entries.filter(entry => {
+    return (
+      entry.sesarTitle !== "" &&
+      entry.sesarTitle !== "none" &&
+      !MVT.includes(entry.sesarTitle)
+    );
+  });
+  //filters to find all multivalue mappings
+  const multiVal = entries.filter(entry => {
+    return MVT.includes(entry.sesarTitle);
+  });
+
+  const values = [];
+  singleVal.forEach(element => {
+    values.push([element.sesarTitle, [element.header]]);
+  });
+
+  //special formatting for multivalues to show organizational header
+  //   and value
+  MVT.forEach(title => {
+    const eachVal = [];
+    multiVal.forEach(element => {
+      if (element.sesarTitle == title) {
+        eachVal.push(element.header + " : " + element.value);
+      }
+    });
+    if (eachVal.length > 0) {
+      values.push([title, eachVal]);
+    }
+  });
+  return values;
 };

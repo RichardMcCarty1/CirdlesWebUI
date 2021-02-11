@@ -54,7 +54,6 @@ const routes = [
     logo: marslogo
   },
   {
-
     path: "/marsMapMaker",
     title: "MarsMapMaker",
     component: MarsMapMaker,
@@ -92,9 +91,11 @@ const Header = ({ title, logo }) => {
           <NavLink className="nav-item nav-link ml-4" to="/squid">
             Squid
           </NavLink>
-          <NavLink className="nav-item nav-link ml-4" to="/ambapo">
+          {/* temporarily unavailable: 
+            uncomment ambapo reference in Home/index as well
+            <NavLink className="nav-item nav-link ml-4" to="/ambapo">
             Ambapo
-          </NavLink>
+          </NavLink>*/}
           <NavLink className="nav-item nav-link ml-4" to="/topsoil">
             Topsoil
           </NavLink>
@@ -153,7 +154,6 @@ const styles = {
     right: "0",
     bottom: "0",
     left: "0",
-    overflow: "auto",
     backgroundColor: colors.primary
   }
 };

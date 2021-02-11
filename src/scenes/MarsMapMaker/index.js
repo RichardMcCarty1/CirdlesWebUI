@@ -1,18 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 // APP.JS /////////////////////////////////////////////////////////////////////
 // This component sets the stage for Mars Map Maker///////////////////////////
-// It renders our three main components (FileIn.js, Dialog.js, CardList.js)//
-// Which act as the entire application itself //////////////////////////////
+// It renders our two main components (FileIn.js and CardList.js)//
+// Which handle the logic of the application ///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-// helllooooooooo
 
 import React from "react";
 
 import classNames from "classnames";
 // COMPONENTS
-import CardList from "./CardList";
-import FileIn from "./FileIn";
-import Dialog from "./Dialog";
+import CardList from "./components/CardList";
+import FileIn from "./components/FileIn";
 // REDUX
 import { connect } from "react-redux";
 import { initToggle } from "../../actions/marsMapMaker";
@@ -29,7 +27,7 @@ export class App extends React.Component {
       emptyCards: [],
       toggleValuesArr: null,
       mapPreview: null,
-      isOpened: props.hasBeenOpened,
+      isOpened: false,
       jsFile: undefined,
       fieldNames: [],
       fieldValues: [],
@@ -146,16 +144,6 @@ export class App extends React.Component {
     }
   };
 
-  // Displays "Preview Pop Up function from cardList, when the Preview Map button is clicked"
-  isOpenCallback = data => {
-    let currentComponent = this;
-
-    currentComponent.setState({
-      isOpened: true,
-      mapPreview: data.join("\n")
-    });
-  };
-
   createSquiggleArray = () => {
     let arr = [];
     for (let i = 0; i < this.state.emptyCards.length; i++) {
@@ -171,25 +159,15 @@ export class App extends React.Component {
     });
 
     return (
-      <div style={{ height: "100vh", position: "relative" }}>
+      <div className="pageBackground">
         <div className={readerClass}>
           <FileIn testID="FileIn" callbackFromParent={this.fileCallback} />
         </div>
-        {this.state.isOpened ? (
-          <Dialog
-            isOpen={this.state.isOpened}
-            onClose={e => this.setState({ isOpened: false })}
-          >
-            {this.state.mapPreview.split("\n").map(i => {
-              return <div>{i}</div>;
-            })}
-          </Dialog>
-        ) : null}
+
         {this.state.continue ? (
           <CardList
             tValLength={this.state.toggleValueLength}
             jsFileValues={this.state.jsFile}
-            callback={this.isOpenCallback}
             fields={[...this.state.emptyCards, ...this.state.fieldNames]}
             toggleVals={this.state.toggleValuesArr}
             fieldVal={[
@@ -208,7 +186,6 @@ export class App extends React.Component {
 const mapStateToProps = state => {
   return {
     ent: state.entries,
-    hasBeenOpened: state.isOpen,
     toggleArr: state.toggleArr
   };
 };

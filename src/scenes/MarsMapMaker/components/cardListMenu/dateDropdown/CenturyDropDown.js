@@ -11,8 +11,8 @@ import { connect } from "react-redux";
 import "semantic-ui-react";
 
 // REDUX
-import { century } from "../../actions/marsMapMaker";
-import { isSesarTitlePresent } from "./util/helper";
+import { century } from "../../../../../actions/marsMapMaker";
+import { isSesarTitlePresent } from "../../../util/helper";
 ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 
@@ -26,8 +26,8 @@ class CenturyDropDown extends React.Component {
 
   searchingEntForDate = () => {
     return (
-      isSesarTitlePresent("collection_start_date", ent) ||
-      isSesarTitlePresent("collection_end_date", ent)
+      isSesarTitlePresent("collection_start_date", this.props.ent) ||
+      isSesarTitlePresent("collection_end_date", this.props.ent)
     );
   };
 
